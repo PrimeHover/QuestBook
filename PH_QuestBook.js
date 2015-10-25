@@ -17,7 +17,7 @@
 
  @param Name in Menu
  @desc Changes the name of the quest book on the menu
- @default "Quest Book"
+ @default Quest Book
 
  @help
 
@@ -57,7 +57,7 @@
 (function() {
 
     /* Getting the parameters */
-    var parameters = PluginManager.parameters('ItemBook');
+    var parameters = PluginManager.parameters('PH_QuestBook');
     var addToMenu = Number(parameters['Show in Menu']);
     var menuText = String(parameters['Name in Menu']);
 
