@@ -156,7 +156,9 @@
                     PHQuests.toggleQuest(getAllArguments(args), false);
                     break;
                 case 'clear':
-                    PHQuests.quests = [];
+                    for (var i = 0; i < PHQuests.quests.length; i++) {
+                        PHQuests.quests[i].active = false;
+                    }
                     break;
                 case 'show':
                     SceneManager.push(Scene_QuestBook);
