@@ -29,3 +29,9 @@ Quest Book for RPG Maker MV
 ### Notes
 
 * "Example of Quest Title" does not need to be a single word or between quotation marks, it can be several words meaning one title.
+
+### ChangeLog
+
+* 03/11/2015: README.md updated
+* 10/25/2015: Correction in the ``clear`` function, which did not allowed that other quests were added after its call.
+* 10/24/2015: Version 1.0

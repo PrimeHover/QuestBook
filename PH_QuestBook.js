@@ -3,7 +3,7 @@
  PH - Quest Book
  @plugindesc This plugin allows the creation and management of a quest book.
  @author PrimeHover
- @version 1.0
+ @version 1.0.1
  @date 10/24/2015
 
  ---------------------------------------------------------------------------------------
