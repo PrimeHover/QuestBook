@@ -32,6 +32,7 @@ Quest Book for RPG Maker MV
 
 ### ChangeLog
 
-* 03/11/2015: README.md updated
+* 11/08/2015: Fixed incompatibility issue that did not allowed this script to be called by the menu if other scripts being called by the menu were in the project.
+* 11/03/2015: README.md updated
 * 10/25/2015: Correction in the ``clear`` function, which did not allowed that other quests were added after its call.
 * 10/24/2015: Version 1.0

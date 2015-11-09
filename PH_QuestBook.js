@@ -3,7 +3,7 @@
  PH - Quest Book
  @plugindesc This plugin allows the creation and management of a quest book.
  @author PrimeHover
- @version 1.0.1
+ @version 1.0
  @date 10/24/2015
 
  ---------------------------------------------------------------------------------------
@@ -193,7 +193,9 @@
      * Creates an icon on the menu for accessing the quest book
      */
     if (addToMenu == 1) {
+        var Window_MenuCommand_prototype_addOriginalCommands = Window_MenuCommand.prototype.addOriginalCommands;
         Window_MenuCommand.prototype.addOriginalCommands = function () {
+            Window_MenuCommand_prototype_addOriginalCommands.call(this);
             this.addCommand(menuText, 'questbook');
         };
         var _Scene_Menu_prototype_createCommandWindow = Scene_Menu.prototype.createCommandWindow;
