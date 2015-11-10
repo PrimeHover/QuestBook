@@ -3,13 +3,16 @@
  PH - Quest Book
  @plugindesc This plugin allows the creation and management of a quest book.
  @author PrimeHover
- @version 1.0
- @date 10/24/2015
+ @version 1.1
+ @date 11/10/2015
 
  ---------------------------------------------------------------------------------------
  This work is licensed under the Creative Commons Attribution 4.0 International License.
  To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/
  ---------------------------------------------------------------------------------------
+
+ @param ---Screen Options---
+ @default
 
  @param Show in Menu
  @desc Allows the player to see the quest book in their menu (1: true, 0: false)
@@ -19,6 +22,33 @@
  @desc Changes the name of the quest book on the menu
  @default Quest Book
 
+ @param Display Type
+ @desc Changes the position of the window (0: top view, 1: side view)
+ @default 0
+
+ @param Show Icons
+ @desc Show an icon before the name of the quest (1: yes, 0: no)
+ @default 1
+
+ @param ---Icon Options---
+ @default
+
+ @param Icon Primary Quest
+ @desc ID of the icon to be displayed in case the quest is primary
+ @default 312
+
+ @param Icon Secondary Quest
+ @desc ID of the icon to be displayed in case the quest is secondary
+ @default 310
+
+ @param Icon Completed Quest
+ @desc ID of the icon to be displayed in case the quest is completed
+ @default 311
+
+ @param Icon Failed Quest
+ @desc ID of the icon to be displayed in case the quest is failed
+ @default 308
+
  @help
 
  Plugin Command:
@@ -26,6 +56,8 @@
     PHQuestBook remove Title_of_the_quest       # Remove a quest from the book
     PHQuestBook clear                           # Clear the Quest Book
     PHQuestBook show                            # Open the Quest Book
+    PHQuestBook complete Title_of_the_quest     # Complete a quest and changes its icon
+    PHQuestBook fail Title_of_the_quest         # Fail a quest and changes its icon
 
  ========================================
 
@@ -36,9 +68,10 @@
     - Create one or several comments to create quests.
     - The comments need to follow a pattern:
 
-        {Example of Quest Title}
+        {Example of Quest Title [primary]}
         Description of the Quest.
 
+    - The [primary] is optional. The quest can be [primary], [secondary], [complete] or [fail]. If you don't specify the priority of the quest, it will be [primary] by default.
     - Each comment corresponds to a single quest.
     - You are allowed to write control characters in the description of the quest (such as \C[n], \I[n]).
     - Because the comments just allow you to write 6 lines, use the tag [br] to break a line in the text.
@@ -60,6 +93,13 @@
     var parameters = PluginManager.parameters('PH_QuestBook');
     var addToMenu = Number(parameters['Show in Menu']);
     var menuText = String(parameters['Name in Menu']);
+    var displayType = Number(parameters['Display Type']);
+
+    var displayIcon = Number(parameters['Show Icons']);
+    var iconPrimary = Number(parameters['Icon Primary Quest']);
+    var iconSecondary = Number(parameters['Icon Secondary Quest']);
+    var iconCompleted = Number(parameters['Icon Completed Quest']);
+    var iconFailed = Number(parameters['Icon Failed Quest']);
 
     /* Local variable for the list of quests */
     var PHQuests;
@@ -87,19 +127,22 @@
         if (questVar != null) {
             this.populateListOfQuests(questVar);
         }
+
     };
 
     /* Populates the quest list */
     PHQuestBook.prototype.populateListOfQuests = function(questVar) {
         var str = '';
         var index = -1;
+        var header;
         this.quests = [];
 
         for (var i = 0; i < questVar.length; i++) {
             if (questVar[i].parameters[0]) {
                 str = questVar[i].parameters[0].trim();
                 if (this.checkTitle(str)) {
-                    this.quests.push({ title: str.slice(1, str.length - 1), description: '', active: false });
+                    header = this.separateTitleAndType(str);
+                    this.quests.push({ title: header[0], icon: header[1], description: '', active: false });
                     index++;
                 } else if (this.quests[index]) {
                     str = str.replace(/\[br\]/g, "\n");
@@ -117,11 +160,80 @@
         return false;
     };
 
+    /* Separates the title from the type of the quest (primary, secondary, etc) */
+    PHQuestBook.prototype.separateTitleAndType = function(str) {
+        var regExpIcon = /\[([^)]+)\]/;
+        var regExpTitle = /\{([^)]+)\}/;
+        var matches = regExpIcon.exec(str);
+
+        var title;
+        var icon;
+
+        if (matches == null) {
+            icon = iconPrimary;
+            title = regExpTitle.exec(str);
+            if (title != null) {
+                title = title[1].trim();
+            } else {
+                title = '';
+            }
+        } else {
+            title = str.replace(matches[0], '');
+            title = regExpTitle.exec(title);
+            if (title != null) {
+                title = title[1].trim();
+            } else {
+                title = '';
+            }
+            switch (matches[1]) {
+                case 'primary':
+                    icon = iconPrimary;
+                    break;
+                case 'secondary':
+                    icon = iconSecondary;
+                    break;
+                case 'complete':
+                    icon = iconCompleted;
+                    break;
+                case 'fail':
+                    icon = iconFailed;
+                    break;
+                default:
+                    icon = iconPrimary;
+            }
+        }
+
+        return [
+            title, icon
+        ];
+
+    };
+
     /* Toggle the quest according to the title */
     PHQuestBook.prototype.toggleQuest = function(title, toggle) {
         for (var i = 0; i < this.quests.length; i++) {
             if (this.quests[i].title == title) {
                 this.quests[i].active = toggle;
+                i = this.quests.length;
+            }
+        }
+    };
+
+    /* Complete a quest */
+    PHQuestBook.prototype.completeQuest = function(title) {
+        for (var i = 0; i < this.quests.length; i++) {
+            if (this.quests[i].title == title) {
+                this.quests[i].icon = iconCompleted;
+                i = this.quests.length;
+            }
+        }
+    };
+
+    /* Fail a quest */
+    PHQuestBook.prototype.failQuest = function(title) {
+        for (var i = 0; i < this.quests.length; i++) {
+            if (this.quests[i].title == title) {
+                this.quests[i].icon = iconFailed;
                 i = this.quests.length;
             }
         }
@@ -162,6 +274,12 @@
                     break;
                 case 'show':
                     SceneManager.push(Scene_QuestBook);
+                    break;
+                case 'complete':
+                    PHQuests.completeQuest(getAllArguments(args));
+                    break;
+                case 'fail':
+                    PHQuests.failQuest(getAllArguments(args));
                     break;
             }
         }
@@ -223,8 +341,8 @@
 
     Window_QuestBookDetails.prototype._details = "";
 
-    Window_QuestBookDetails.prototype.initialize = function(x, y, height) {
-        Window_Base.prototype.initialize.call(this, x, y, Graphics.boxWidth, height);
+    Window_QuestBookDetails.prototype.initialize = function(x, y, width, height) {
+        Window_Base.prototype.initialize.call(this, x, y, width, height);
     };
 
     Window_QuestBookDetails.prototype.refresh = function() {
@@ -246,9 +364,20 @@
     Window_QuestBookIndex.prototype.availableQuests = [];
 
     Window_QuestBookIndex.prototype.initialize = function() {
-        var height = this.fittingHeight(3);
-        Window_Selectable.prototype.initialize.call(this, 0, 0, Graphics.boxWidth, height);
-        this._detailsWindow = new Window_QuestBookDetails(0, height, (Graphics.boxHeight - height));
+
+        console.log(PHQuests);
+
+        var height;
+        if (displayType == 0) {
+            height = this.fittingHeight(4);
+            Window_Selectable.prototype.initialize.call(this, 0, 0, Graphics.boxWidth, height);
+            this._detailsWindow = new Window_QuestBookDetails(0, height, Graphics.boxWidth, (Graphics.boxHeight - height));
+        } else if (displayType == 1) {
+            height = 320;
+            Window_Selectable.prototype.initialize.call(this, 0, 0, height, Graphics.boxHeight);
+            this._detailsWindow = new Window_QuestBookDetails(height, 0, Graphics.boxWidth - height, Graphics.boxHeight);
+        }
+
         this.refresh();
         this.select(0);
         this.activate();
@@ -296,10 +425,18 @@
     };
 
     Window_QuestBookIndex.prototype.drawQuest = function(index) {
+
         var quest = this.availableQuests[index].title;
         var rect = this.itemRectForText(index);
-        var width = rect.width - this.textPadding();
-        this.drawText(quest, rect.x, rect.y, width);
+
+        var iconWidth = Window_Base._iconWidth + 3;
+        if (displayIcon == 1) {
+            this.drawIcon(this.availableQuests[index].icon, rect.x, rect.y + 2);
+        } else {
+            iconWidth = 0;
+        }
+        var width = rect.width - this.textPadding() - iconWidth;
+        this.drawText(quest, rect.x + iconWidth, rect.y, width);
     };
 
 
