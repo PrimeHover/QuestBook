@@ -30,7 +30,7 @@ Quest Book for RPG Maker MV
 * Create one or several comments to create quests.
 * The comments need to follow a pattern:
 
-    ``{Example of Quest Title [primary]}``
+    ``{Example of Quest Title [primary]}``  
     ``Description of the Quest.``
 
 * The ``[primary]`` is optional. The quest can be ``[primary]``,``[secondary]``, ``[complete]`` or ``[fail]``. If you don't specify the priority of the quest, it will be ``[primary]`` by default.
@@ -46,6 +46,7 @@ Quest Book for RPG Maker MV
 
 ### ChangeLog
 
+* 11/11/2015: README.md updated
 * 11/10/2015: Version 1.1 released.
 * 11/08/2015: Fixed incompatibility issue that did not allowed this script to be called by the menu if other scripts being called by the menu were in the project.
 * 11/03/2015: README.md updated
