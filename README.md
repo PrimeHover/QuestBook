@@ -46,6 +46,7 @@ Quest Book for RPG Maker MV
 
 ### ChangeLog
 
+* 11/12/2015: Fixed issue about not saving quests when saving and exiting the game. Also, added some features to check status and priorities of quests via Script command.
 * 11/11/2015: README.md updated
 * 11/10/2015: Version 1.1 released.
 * 11/08/2015: Fixed incompatibility issue that did not allowed this script to be called by the menu if other scripts being called by the menu were in the project.

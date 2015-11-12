@@ -3,8 +3,8 @@
  PH - Quest Book
  @plugindesc This plugin allows the creation and management of a quest book.
  @author PrimeHover
- @version 1.1
- @date 11/10/2015
+ @version 1.1.1
+ @date 11/12/2015
 
  ---------------------------------------------------------------------------------------
  This work is licensed under the Creative Commons Attribution 4.0 International License.
@@ -78,6 +78,13 @@
 
     - To register a quest in the book, create an event in the map, go to "Plugin Command" and type the command for adding the quest
         Ex.: PHQuestBook add Example of Quest Title
+    - To check the status or priority of the quest, you can use these Script commands:
+
+        PHQuests.isActive("Title of the Quest");
+        PHQuests.isComplete("Title of the Quest");
+        PHQuests.isSecondary("Title of the Quest");
+        PHQuests.isPrimary("Title of the Quest");
+        PHQuests.isFail("Title of the Quest");
 
  ========================================
 
@@ -86,6 +93,9 @@
  "Example of Quest Title" does not need to be a single word or between quotation marks, it can be several words meaning one title.
 
  */
+
+/* Global variable for the list of quests */
+var PHQuests;
 
 (function() {
 
@@ -100,9 +110,6 @@
     var iconSecondary = Number(parameters['Icon Secondary Quest']);
     var iconCompleted = Number(parameters['Icon Completed Quest']);
     var iconFailed = Number(parameters['Icon Failed Quest']);
-
-    /* Local variable for the list of quests */
-    var PHQuests;
 
     /* CLASS PHQuestBook */
     function PHQuestBook() {
@@ -219,6 +226,13 @@
         }
     };
 
+    /* Clear quests */
+    PHQuestBook.prototype.clearQuests = function() {
+        for (var i = 0; i < PHQuests.quests.length; i++) {
+            PHQuests.quests[i].active = false;
+        }
+    };
+
     /* Complete a quest */
     PHQuestBook.prototype.completeQuest = function(title) {
         for (var i = 0; i < this.quests.length; i++) {
@@ -237,6 +251,61 @@
                 i = this.quests.length;
             }
         }
+    };
+
+    /* Gets the index of the quest title */
+    PHQuestBook.prototype.findIndex = function(title) {
+        for (var i = 0; i < this.quests.length; i++) {
+            if (title == this.quests[i].title) {
+                return i;
+            }
+        }
+        return -1;
+    };
+
+    /* Checks if a quest is active */
+    PHQuestBook.prototype.isActive = function(title) {
+        var index = this.findIndex(title);
+        if (index > -1 && this.quests[index].active) {
+            return true;
+        }
+        return false;
+    };
+
+    /* Checks if a quest is primary */
+    PHQuestBook.prototype.isPrimary = function(title) {
+        var index = this.findIndex(title);
+        if (index > -1 && this.quests[index].icon == iconPrimary) {
+            return true;
+        }
+        return false;
+    };
+
+    /* Checks if a quest is secondary */
+    PHQuestBook.prototype.isSecondary = function(title) {
+        var index = this.findIndex(title);
+        if (index > -1 && this.quests[index].icon == iconSecondary) {
+            return true;
+        }
+        return false;
+    };
+
+    /* Checks if a quest is completed */
+    PHQuestBook.prototype.isComplete = function(title) {
+        var index = this.findIndex(title);
+        if (index > -1 && this.quests[index].icon == iconCompleted) {
+            return true;
+        }
+        return false;
+    };
+
+    /* Checks if a quest is failed */
+    PHQuestBook.prototype.isFail = function(title) {
+        var index = this.findIndex(title);
+        if (index > -1 && this.quests[index].icon == iconFailed) {
+            return true;
+        }
+        return false;
     };
 
 
@@ -268,9 +337,7 @@
                     PHQuests.toggleQuest(getAllArguments(args), false);
                     break;
                 case 'clear':
-                    for (var i = 0; i < PHQuests.quests.length; i++) {
-                        PHQuests.quests[i].active = false;
-                    }
+                    PHQuests.clearQuests();
                     break;
                 case 'show':
                     SceneManager.push(Scene_QuestBook);
@@ -300,6 +367,22 @@
             PHQuests = new PHQuestBook();
             PHQuests.getPHQuestCommonEvent();
         }
+    };
+
+    /* Saves the quests when the player saves the game */
+    var _DataManager_makeSaveContents_ = DataManager.makeSaveContents;
+    DataManager.makeSaveContents = function() {
+        var contents = _DataManager_makeSaveContents_.call(this);
+        contents.quests = PHQuests.quests;
+        return contents;
+    };
+
+    /* Retrieve the quests from the save content */
+    var _DataManager_extractSaveContents_ = DataManager.extractSaveContents;
+    DataManager.extractSaveContents = function(contents) {
+        _DataManager_extractSaveContents_.call(this, contents);
+        PHQuests = new PHQuestBook();
+        PHQuests.quests = contents.quests;
     };
 
 
@@ -364,8 +447,6 @@
     Window_QuestBookIndex.prototype.availableQuests = [];
 
     Window_QuestBookIndex.prototype.initialize = function() {
-
-        console.log(PHQuests);
 
         var height;
         if (displayType == 0) {
