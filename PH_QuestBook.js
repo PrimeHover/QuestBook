@@ -555,7 +555,7 @@ PHPlugins.Params.PHQuestTextPage = String(PHPlugins.Parameters['Text Page']);
  * Creates an icon on the menu for accessing the quest book
  * It's compatible with Yanfly Main Menu Manager as well
  */
-if (PHPlugins.Params.PHQuestAddToMenu == 1 && typeof Yanfly.MMM === "undefined") {
+if (PHPlugins.Params.PHQuestAddToMenu == 1 && (typeof Yanfly === "undefined" || typeof Yanfly.MMM === "undefined")) {
     var Window_MenuCommand_prototype_addOriginalCommands = Window_MenuCommand.prototype.addOriginalCommands;
     Window_MenuCommand.prototype.addOriginalCommands = function () {
         Window_MenuCommand_prototype_addOriginalCommands.call(this);
