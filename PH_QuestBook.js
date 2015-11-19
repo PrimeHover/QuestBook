@@ -359,7 +359,7 @@ PHPlugins.Params.PHQuestTextPage = String(PHPlugins.Parameters['Text Page']);
     PHQuestBook.prototype.completeQuest = function(title) {
         for (var i = 0; i < this.quests.length; i++) {
             if (this.quests[i].title == title) {
-                this.quests[i].icon = iconCompleted;
+                this.quests[i].icon = PHPlugins.Params.PHQuestIconCompleted;
                 this.quests[i].type = 'complete';
                 i = this.quests.length;
             }
@@ -370,7 +370,7 @@ PHPlugins.Params.PHQuestTextPage = String(PHPlugins.Parameters['Text Page']);
     PHQuestBook.prototype.failQuest = function(title) {
         for (var i = 0; i < this.quests.length; i++) {
             if (this.quests[i].title == title) {
-                this.quests[i].icon = iconFailed;
+                this.quests[i].icon = PHPlugins.Params.PHQuestIconCompleted;
                 this.quests[i].type = 'fail';
                 i = this.quests.length;
             }
