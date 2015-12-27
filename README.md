@@ -11,6 +11,7 @@ Quest Book for RPG Maker MV
 * ``Name in Menu``: Label of the Quest Book on the menu.
 * ``Display Type``: Change the position for displaying the quest book (0: top view, 1: side view).
 * ``Show Icons``: Show an icon before the name of the quest in the book (1: yes, 0: no).
+* ``Background Image``: Image for background of the quest book (PNG image only; Leave it in blank to have the default background)
 * ``Icon Primary Quest``: ID of the icon to be displayed in case the quest is primary.
 * ``Icon Secondary Quest``: ID of the icon to be displayed in case the quest is secondary.
 * ``Icon Completed Quest``: ID of the icon to be displayed in case the quest is completed.
