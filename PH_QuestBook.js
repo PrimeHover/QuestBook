@@ -3,8 +3,8 @@
  PH - Quest Book
  @plugindesc This plugin allows the creation and management of a quest book via a Common Event and Plugin Commands.
  @author PrimeHover
- @version 1.3.0
- @date 12/27/2015
+ @version 1.3.1
+ @date 01/11/2016
 
  ---------------------------------------------------------------------------------------
  This work is licensed under the Creative Commons Attribution 4.0 International License.
@@ -344,8 +344,9 @@ PHPlugins.Params.PHQuestTextNoQuest = String(PHPlugins.Parameters['Text No Quest
     PHQuestBook.prototype.updateQuest = function(title) {
         for (var i = 0; i < this.quests.length; i++) {
             if (this.quests[i].title == title) {
-                if (this.quests[i].descriptions.length - 1 <= this.quests[i].updates + 1) {
-                    this.quests[i].updates++;
+                console.log('find');
+                if (this.quests[i].updates + 1 <= this.quests[i].descriptions.length - 1) {
+                    this.quests[i].updates = this.quests[i].updates + 1;
                     i = this.quests.length;
                 }
             }
@@ -1006,15 +1007,13 @@ Scene_QuestBook.prototype.create = function() {
 
 };
 
-Scene_QuestBook.prototype.createBackground = function() {
-    this._backgroundSprite = new Sprite();
-    if (PHPlugins.Params.PHQuestBackgroundImage != '') {
+if (PHPlugins.Params.PHQuestBackgroundImage != '') {
+    Scene_QuestBook.prototype.createBackground = function () {
+        this._backgroundSprite = new Sprite();
         this._backgroundSprite.bitmap = ImageManager.loadPicture(PHPlugins.Params.PHQuestBackgroundImage);
-    } else {
-        this._backgroundSprite.bitmap = SceneManager.backgroundBitmap();
-    }
-    this.addChild(this._backgroundSprite);
-};
+        this.addChild(this._backgroundSprite);
+    };
+}
 
 Scene_QuestBook.prototype.createWindowCategory = function() {
     this._categoryWindow = new Window_QuestBookCategory();

@@ -37,7 +37,7 @@ Quest Book for RPG Maker MV
 * Create one or several comments to create quests.
 * The comments need to follow a pattern:
 
-    ``{Example of Quest Title [primary:iconID]}``    
+    ``{Example of Quest Title [primary:iconID]}``
     ``Description of the Quest.``
 
 * The ``[primary]`` is optional. The quest can be ``[primary]``,``[secondary]``, ``[complete]`` or ``[fail]``. If you don't specify the priority of the quest, it will be ``[primary]`` by default.
@@ -58,6 +58,7 @@ You are allowed to have as many ``[break-on-update]`` as you want. And always wh
 
 ### ChangeLog
 
+* 01/11/2016: Bux fixes (black background when using third party plugins that deals with background; update quests now working)
 * 12/27/2015: Version 1.3 released (Page improvements, background image and tag notations)
 * 11/19/2015: Version 1.2 released (More organized layout, quests separated by category, page breaks when writing quests, allow several comments to write quests, bug fixing).
 * 11/12/2015: Fixed issue about not saving quests when saving and exiting the game. Also, added some features to check status and priorities of quests via Script command.
