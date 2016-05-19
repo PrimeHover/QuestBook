@@ -63,8 +63,8 @@ Quest Book for RPG Maker MV
 ##### REGISTERING A QUEST ON THE BOOK
 * To register a quest in the book, create an event in the map, go to "Plugin Command" and type the command for adding the quest
     Ex.: ``PHQuestBook add Example of Quest Title``
-* To check the status or category of the quest, you can use these Script commands:
-    ``PHPlugins.PHQuests.isActive("Title of the Quest");``     
+* To check the status or category of the quest, you can use these Script commands:       
+    ``PHPlugins.PHQuests.isActive("Title of the Quest");``       
     ``PHPlugins.PHQuests.is("Title of the Quest", "categoryID");``
 
 ### NOTES
@@ -73,7 +73,7 @@ Quest Book for RPG Maker MV
 
 ### ChangeLog
 
-* 19/05/2016: Version 2.0 (Infinite Categories, Title Window, New Layout, and bug fixes)
+* 05/19/2016: Version 2.0 (Infinite Categories, Title Window, New Layout, and bug fixes)
 * 01/11/2016: Bug fixes (black background when using third party plugins that deals with background; update quests now working)
 * 12/27/2015: Version 1.3 released (Page improvements, background image and tag notations)
 * 11/19/2015: Version 1.2 released (More organized layout, quests separated by category, page breaks when writing quests, allow several comments to write quests, bug fixing).
