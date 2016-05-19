@@ -3,8 +3,8 @@
  PH - Quest Book
  @plugindesc This plugin allows the creation and management of a quest book via a Common Event and Plugin Commands.
  @author PrimeHover
- @version 2.0.0
- @date 05/19/2016
+ @version 1.3.1
+ @date 01/11/2016
 
  ---------------------------------------------------------------------------------------
  This work is licensed under the Creative Commons Attribution 4.0 International License.
@@ -22,6 +22,10 @@
  @desc Changes the name of the quest book on the menu (Ignore it if you are using Yanfly Main Menu Manager)
  @default Quest Book
 
+ @param Display Type
+ @desc Changes the position of the window (0: top view, 1: side view)
+ @default 1
+
  @param Show Icons
  @desc Show an icon before the name of the quest (1: yes, 0: no)
  @default 1
@@ -30,99 +34,90 @@
  @desc Image for background of the quest book (PNG image only; Leave it in blank to have the default background)
  @default
 
- @param ---Category Options---
+ @param ---Icon Options---
  @default
 
- @param Category IDs
- @desc ID of the categories to be displayed separated by commas (,) (each one has to be unique!)
- @default primary, secondary, completed, failed
-
- @param Category Texts
- @desc Texts of the categories to be displayed separated by commas (,) (it has to be placed in the same order as the category ids!)
- @default Primary, Secondary, Completed, Failed
-
- @param Category Icons ID
- @desc Icons of the categories to be displayed separated by commas (,) (it has to be placed in the same order as the category ids!)
- @default 312, 311, 310, 309
-
- @param ---Default Options---
- @default
-
- @param Icon Default Quest
- @desc ID of the icon to be displayed in case the quest does not have a specific category
+ @param Icon Primary Quest
+ @desc ID of the icon to be displayed in case the quest is primary
  @default 312
 
- @param Text Default Quest
- @desc Default text to be shown when the quest does not have a specific category
- @default Default
+ @param Icon Secondary Quest
+ @desc ID of the icon to be displayed in case the quest is secondary
+ @default 310
+
+ @param Icon Completed Quest
+ @desc ID of the icon to be displayed in case the quest is completed
+ @default 311
+
+ @param Icon Failed Quest
+ @desc ID of the icon to be displayed in case the quest is failed
+ @default 308
+
+ @param ---Vocabulary Options---
+ @default
+
+ @param Text Primary
+ @desc Vocabulary for "Primary"
+ @default Primary
+
+ @param Text Secondary
+ @desc Vocabulary for "Secondary"
+ @default Secondary
+
+ @param Text Complete
+ @desc Vocabulary for "Complete"
+ @default Complete
+
+ @param Text Fail
+ @desc Vocabulary for "Fail"
+ @default Fail
 
  @param Text No Quests
  @desc Text to be shown when no quests are available
  @default No Quests Available
 
- @param ---Additional Options---
- @default
-
- @param Text Title
- @desc Text of the title of the book
- @default My Quest Book
-
- @param Text Title Color
- @desc Color for the text of the title of the book (RMMV Color Code)
- @default 0
-
  @help
 
  Plugin Command:
-    PHQuestBook add Title_of_the_quest                   # Add a quest in the book
-    PHQuestBook remove Title_of_the_quest                # Remove a quest from the book
-    PHQuestBook clear                                    # Clear the Quest Book
-    PHQuestBook show                                     # Open the Quest Book
-    PHQuestBook change Title_of_the_quest|category       # Changes the category of a quest
-    PHQuestBook update Title_of_the_quest                # Updates an existent quest
+    PHQuestBook add Title_of_the_quest          # Add a quest in the book
+    PHQuestBook remove Title_of_the_quest       # Remove a quest from the book
+    PHQuestBook clear                           # Clear the Quest Book
+    PHQuestBook show                            # Open the Quest Book
+    PHQuestBook complete Title_of_the_quest     # Complete a quest and changes its icon
+    PHQuestBook fail Title_of_the_quest         # Fail a quest and changes its icon
+    PHQuestBook update Title_of_the_quest       # Updates an existent quest
 
  ========================================
 
- HOW TO USE:
+ How to Use:
 
-    CREATING A CATEGORY:
-    - In order to create a category, you have to set 3 required parameters, which are: [Category IDs], [Category Texts] and [Category Icons IDs]. Here is an example of these three parameters.
-
-        [Category IDs]:         primary, secondary, completed, failed
-        [Category Texts]:       Primary, Secondary, Completed, Failed
-        [Category Icons IDs]:   312, 311, 310, 309
-
-    - In the example above, the "primary" in [Category IDs] will be a category. The text that will be displayed when a quest is in this category is "Primary", and the default icon for this category is the ID "312".
-    - As I stated earlier, you can have as many categories as you want. You just need to separate the ids, names and icons with a comma (,).
-    - IMPORTANT: Make sure that you have the same amount of ids, texts and icons. In other words, if you have 4 IDs, you must have 4 Texts and 4 Icons.
-
-
-    WRITING A QUEST:
     - Open the database and go to the section "Common Events"
     - Create a common event with the name "PHQuestBook" (without quotation marks)
     - Create one or several comments to create quests.
     - The comments need to follow a pattern:
 
-        {Example of Quest Title|categoryID|iconID}
+        {Example of Quest Title [primary:iconID]}
         Description of the Quest.
 
-    - The "categoryID" is optional, but it is highly recommended in order to sort your quests. You can set as many categories as you want using the parameter [Category IDs]. If you don't specify the category of the quest, it will be set as "default".
-    - The "iconID" is also optional. You can put the ID of the icon you want to show for this quest. If you don't specify an item, the quest will get the default for its category.
+    - The [primary] is optional. The quest can be [primary], [secondary], [complete] or [fail]. If you don't specify the priority of the quest, it will be [primary] by default.
+    - The "iconID" is also optional. You can put the ID of the icon you want to show for this quest. If you don't specify an item, the quest will get the default for its priority.
     - You are allowed to have several comments meaning one quest (you don't need to use just the 6 lines for comments, you can add a new comment right below and keep going).
     - You are allowed to write control characters in the description of the quest (such as \C[n], \I[n], \V[n]).
-    - You are allowed to use some special tags to get the name of an item, weapon, armor, enemy or actor. When you are writing the description of a quest, use the tags <enemy:ID>, <actor:ID>, <item:ID>, <weapon:ID> and <armor:ID> to print the name of the particular item on the description. Change "ID" for the corresponding number you want.
-    - There is a tag called [break-on-update]. When you use it, all the content of the same quest will be hidden, and it will just appear in the quest book when you call the plugin command "PHQuestBook update Title_of_the_quest".
-    - You are allowed to have as many [break-on-update] as you want. And always when you call the plugin command for updating, it will allow the player to see a new part of the quest.
+    - You are allowed to use the tag [br] to break a line in the text.
+    - You are allowed to use some special tags to get the name of an item, weapon, armor, enemy or actor. When you are writing the description of a quest, use the tags <enemy:ID>, <actor:ID>, <item:ID>, <weapon:ID> and <armor:ID> to print the name of the particular item on the description. Substitute ID for the corresponding number you want.
+    - There is also a tag called [break-on-update] . This command works in the same way as [break], but it has a small difference: The content placed after [break-on-update] will just appear in the quest book when you call the plugin command "PHQuestBook update Title_of_the_quest".
+      You are allowed to have as many [break-on-update] as you want. And always when you call the plugin command for updating, it will allow the player to see a new part of the quest.
       (This is a good feature if you want to have a "step-by-step" quest, where each time the player completes the quest, the same quest is updated and new things have to be done).
 
-    REGISTERING A QUEST ON THE BOOK:
     - To register a quest in the book, create an event in the map, go to "Plugin Command" and type the command for adding the quest
-         Ex.: PHQuestBook add Example of Quest Title
-    - To check the status or category of the quest, you can use these Script commands:
+        Ex.: PHQuestBook add Example of Quest Title
+    - To check the status or priority of the quest, you can use these Script commands:
 
-         PHPlugins.PHQuests.isActive("Title of the Quest");
-         PHPlugins.PHQuests.is("Title of the Quest", "categoryID");
-
+    PHPlugins.PHQuests.isActive("Title of the Quest");
+    PHPlugins.PHQuests.isComplete("Title of the Quest");
+    PHPlugins.PHQuests.isSecondary("Title of the Quest");
+    PHPlugins.PHQuests.isPrimary("Title of the Quest");
+    PHPlugins.PHQuests.isFail("Title of the Quest");
 
  ========================================
 
@@ -147,60 +142,25 @@ PHPlugins.Params.PHQuestDisplayType = Number(PHPlugins.Parameters['Display Type'
 PHPlugins.Params.PHQuestBackgroundImage = String(PHPlugins.Parameters['Background Image']);
 
 PHPlugins.Params.PHQuestDisplayIcon = Number(PHPlugins.Parameters['Show Icons']);
-PHPlugins.Params.PHQuestIconDefault = Number(PHPlugins.Parameters['Icon Default Quest']);
+PHPlugins.Params.PHQuestIconPrimary = Number(PHPlugins.Parameters['Icon Primary Quest']);
+PHPlugins.Params.PHQuestIconSecondary = Number(PHPlugins.Parameters['Icon Secondary Quest']);
+PHPlugins.Params.PHQuestIconCompleted = Number(PHPlugins.Parameters['Icon Completed Quest']);
+PHPlugins.Params.PHQuestIconFailed = Number(PHPlugins.Parameters['Icon Failed Quest']);
 
-PHPlugins.Params.PHQuestTextTitle = String(PHPlugins.Parameters['Text Title']);
-PHPlugins.Params.PHQuestTextTitleColor = Number(PHPlugins.Parameters['Text Title Color']);
-
-PHPlugins.Params.PHQuestTextDefault = String(PHPlugins.Parameters['Text Default Quest']);
+PHPlugins.Params.PHQuestTextPrimary = String(PHPlugins.Parameters['Text Primary']);
+PHPlugins.Params.PHQuestTextSecondary = String(PHPlugins.Parameters['Text Secondary']);
+PHPlugins.Params.PHQuestTextComplete = String(PHPlugins.Parameters['Text Complete']);
+PHPlugins.Params.PHQuestTextFail = String(PHPlugins.Parameters['Text Fail']);
 PHPlugins.Params.PHQuestTextNoQuest = String(PHPlugins.Parameters['Text No Quests']);
-
-PHPlugins.Params.PHQuestCategoryId = String(PHPlugins.Parameters['Category IDs']);
-PHPlugins.Params.PHQuestCategoryTexts = String(PHPlugins.Parameters['Category Texts']);
-PHPlugins.Params.PHQuestCategoryIcons = String(PHPlugins.Parameters['Category Icons ID']);
 
 (function() {
 
     /* CLASS PHQuestBook */
     function PHQuestBook() {
         this.quests = [];
-        this._categories = this.populateCategories();
-        this._lastCategory = 'default';
+        this._lastCategory = 'primary';
     }
     PHQuestBook.prototype.constructor = PHQuestBook;
-
-    /* Populates the categories */
-    PHQuestBook.prototype.populateCategories = function() {
-        var categories = { 'default': { name: PHPlugins.Params.PHQuestTextDefault, icon: PHPlugins.Params.PHQuestIconDefault } };
-        if (PHPlugins.Params.PHQuestCategoryId.trim() != '') {
-            var ids = PHPlugins.Params.PHQuestCategoryId.split(',');
-            var names = PHPlugins.Params.PHQuestCategoryTexts.split(',');
-            var icons = PHPlugins.Params.PHQuestCategoryIcons.split(',');
-
-            for (var i = 0; i < ids.length; i++) {
-                ids[i] = ids[i].trim();
-
-                // Name
-                if (typeof names[i] != 'undefined') {
-                    names[i] = names[i].trim();
-                } else {
-                    names[i] = PHPlugins.Params.PHQuestTextDefault + ' - ' + i;
-                }
-
-                // Icon
-                if (typeof icons[i] != 'undefined') {
-                    icons[i] = icons[i].trim();
-                } else {
-                    icons[i] = PHPlugins.Params.PHQuestIconDefault;
-                }
-
-                // Adding the category
-                categories[ids[i]] = { name: names[i], icon: icons[i] };
-            }
-
-        }
-        return categories;
-    };
 
     /* Gets the Common Event for quests */
     PHQuestBook.prototype.getPHQuestCommonEvent = function() {
@@ -250,6 +210,7 @@ PHPlugins.Params.PHQuestCategoryIcons = String(PHPlugins.Parameters['Category Ic
                     descriptionIndex = 0;
                     index++;
                 } else if (this.quests[index]) {
+                    str = str.replace(/\[br\]/g, "\n");
                     str = this.replaceVariants(str);
                     checkPage = this.checkPageBreak(str);
                     if (checkPage == 0) {
@@ -327,35 +288,40 @@ PHPlugins.Params.PHQuestCategoryIcons = String(PHPlugins.Parameters['Category Ic
         return 0;
     };
 
-    /* Separates the title from the type of the quest */
+    /* Separates the title from the type of the quest (primary, secondary, etc) */
     PHQuestBook.prototype.separateTitleAndType = function(str) {
-
+        var regExpIcon = /\[([^)]+)\]/;
         var regExpTitle = /\{([^)]+)\}/;
-        var matches = regExpTitle.exec(str);
+        var matches = regExpIcon.exec(str);
 
         var title;
         var icon;
         var category;
 
         if (matches == null) {
-            icon = PHPlugins.Params.PHQuestIconDefault;
-            category = 'default';
-            title = '';
-        } else {
-            matches[1] = matches[1].trim();
-            title = matches[1].split('|');
-            if (typeof title[1] != 'undefined' && title[1].trim() != '' && typeof this._categories[title[1].trim()] != 'undefined') {
-                category = title[1].trim();
-                if (typeof title[2] != 'undefined' && title[2].trim() != '') {
-                    icon = title[2].trim();
-                } else {
-                    icon = this._categories[category].icon;
-                }
+            icon = PHPlugins.Params.PHQuestIconPrimary;
+            category = 'primary';
+            title = regExpTitle.exec(str);
+            if (title != null) {
+                title = title[1].trim();
             } else {
-                category = 'default';
-                icon = PHPlugins.Params.PHQuestIconDefault;
+                title = '';
             }
-            title = title[0].trim();
+        } else {
+            title = str.replace(matches[0], '');
+            matches[1] = matches[1].split(':');
+            title = regExpTitle.exec(title);
+            category = matches[1][0];
+            if (title != null) {
+                title = title[1].trim();
+            } else {
+                title = '';
+            }
+            if (typeof matches[1][1] !== 'undefined' && !isNaN(parseInt(matches[1][1]))) {
+                icon = parseInt(matches[1][1]);
+            } else {
+                icon = this.getIconForCategory(category);
+            }
         }
 
         return [
@@ -378,6 +344,7 @@ PHPlugins.Params.PHQuestCategoryIcons = String(PHPlugins.Parameters['Category Ic
     PHQuestBook.prototype.updateQuest = function(title) {
         for (var i = 0; i < this.quests.length; i++) {
             if (this.quests[i].title == title) {
+                console.log('find');
                 if (this.quests[i].updates + 1 <= this.quests[i].descriptions.length - 1) {
                     this.quests[i].updates = this.quests[i].updates + 1;
                     i = this.quests.length;
@@ -388,15 +355,10 @@ PHPlugins.Params.PHQuestCategoryIcons = String(PHPlugins.Parameters['Category Ic
 
     /* Get the quantity of quests for the category menu */
     PHQuestBook.prototype.getQuantityQuests = function() {
-        var counter = {};
-        for (var val in this._categories) {
-            if (this._categories.hasOwnProperty(val)) {
-                counter[val] = { qtty: 0, name: this._categories[val].name };
-            }
-        }
+        var counter = { primary: 0, secondary: 0, complete: 0, fail: 0 };
         for (var i = 0; i < this.quests.length; i++) {
             if (this.quests[i].active) {
-                counter[this.quests[i].type].qtty++;
+                counter[this.quests[i].type]++;
             }
         }
         return counter;
@@ -445,18 +407,24 @@ PHPlugins.Params.PHQuestCategoryIcons = String(PHPlugins.Parameters['Category Ic
         }
     };
 
-    /* Changes the category of a quest with the given term (Title of the Quest|category) */
-    PHQuestBook.prototype.changeQuestCategory = function(term) {
-        term = term.split('|');
-        if (term.length == 2) {
-            term[0] = term[0].trim();
-            term[1] = term[1].trim();
-            for (var i = 0; i < this.quests.length; i++) {
-                if (this.quests[i].title == term[0] && typeof this._categories[term[1]] != 'undefined') {
-                    this.quests[i].icon = PHPlugins.Params.PHQuestIconCompleted;
-                    this.quests[i].type = term[1];
-                    i = this.quests.length;
-                }
+    /* Complete a quest */
+    PHQuestBook.prototype.completeQuest = function(title) {
+        for (var i = 0; i < this.quests.length; i++) {
+            if (this.quests[i].title == title) {
+                this.quests[i].icon = PHPlugins.Params.PHQuestIconCompleted;
+                this.quests[i].type = 'complete';
+                i = this.quests.length;
+            }
+        }
+    };
+
+    /* Fail a quest */
+    PHQuestBook.prototype.failQuest = function(title) {
+        for (var i = 0; i < this.quests.length; i++) {
+            if (this.quests[i].title == title) {
+                this.quests[i].icon = PHPlugins.Params.PHQuestIconCompleted;
+                this.quests[i].type = 'fail';
+                i = this.quests.length;
             }
         }
     };
@@ -473,10 +441,23 @@ PHPlugins.Params.PHQuestCategoryIcons = String(PHPlugins.Parameters['Category Ic
 
     /* Gets the symbol for the category */
     PHQuestBook.prototype.getIconForCategory = function(symbol) {
-        if (typeof this._categories[symbol] != 'undefined') {
-            return this._categories[symbol].icon;
+        switch (symbol) {
+            case 'primary':
+                return PHPlugins.Params.PHQuestIconPrimary;
+                break;
+            case 'secondary':
+                return PHPlugins.Params.PHQuestIconSecondary;
+                break;
+            case 'complete':
+                return PHPlugins.Params.PHQuestIconCompleted;
+                break;
+            case 'fail':
+                return PHPlugins.Params.PHQuestIconFailed;
+                break;
+            default:
+                return PHPlugins.Params.PHQuestIconPrimary;
+                break;
         }
-        return PHPlugins.Params.PHQuestIconDefault;
     };
 
     /* Checks if a quest is active */
@@ -488,10 +469,37 @@ PHPlugins.Params.PHQuestCategoryIcons = String(PHPlugins.Parameters['Category Ic
         return false;
     };
 
-    /* Checks if a quest has a particular category */
-    PHQuestBook.prototype.is = function(title, category) {
+    /* Checks if a quest is primary */
+    PHQuestBook.prototype.isPrimary = function(title) {
         var index = this.findIndex(title);
-        if (index > -1 && this.quests[index].type == category) {
+        if (index > -1 && this.quests[index].type == 'primary') {
+            return true;
+        }
+        return false;
+    };
+
+    /* Checks if a quest is secondary */
+    PHQuestBook.prototype.isSecondary = function(title) {
+        var index = this.findIndex(title);
+        if (index > -1 && this.quests[index].type == 'secondary') {
+            return true;
+        }
+        return false;
+    };
+
+    /* Checks if a quest is completed */
+    PHQuestBook.prototype.isComplete = function(title) {
+        var index = this.findIndex(title);
+        if (index > -1 && this.quests[index].type == 'complete') {
+            return true;
+        }
+        return false;
+    };
+
+    /* Checks if a quest is failed */
+    PHQuestBook.prototype.isFail = function(title) {
+        var index = this.findIndex(title);
+        if (index > -1 && this.quests[index].type == 'fail') {
             return true;
         }
         return false;
@@ -531,8 +539,11 @@ PHPlugins.Params.PHQuestCategoryIcons = String(PHPlugins.Parameters['Category Ic
                 case 'show':
                     SceneManager.push(Scene_QuestBook);
                     break;
-                case 'change':
-                    PHPlugins.PHQuests.changeQuestCategory(getAllArguments(args));
+                case 'complete':
+                    PHPlugins.PHQuests.completeQuest(getAllArguments(args));
+                    break;
+                case 'fail':
+                    PHPlugins.PHQuests.failQuest(getAllArguments(args));
                     break;
                 case 'update':
                     PHPlugins.PHQuests.updateQuest(getAllArguments(args));
@@ -616,30 +627,6 @@ if (PHPlugins.Params.PHQuestAddToMenu == 1 && (typeof Yanfly === "undefined" || 
  * ---------------------------------------------------------- */
 
 /*
- * WINDOW QUEST BOOK TITLE
- */
-function Window_QuestBookTitle() {
-    this.initialize.apply(this, arguments);
-}
-Window_QuestBookTitle.prototype = Object.create(Window_Base.prototype);
-Window_QuestBookTitle.prototype.constructor = Window_QuestBookTitle;
-
-Window_QuestBookTitle.prototype.initialize = function() {
-    Window_Base.prototype.initialize.call(this, 0, 0, Graphics.boxWidth, this.fittingHeight(1));
-    if (isNaN(parseInt(PHPlugins.Params.PHQuestTextTitleColor))) {
-        PHPlugins.Params.PHQuestTextTitleColor = 0;
-    }
-    this.refresh();
-};
-
-Window_QuestBookTitle.prototype.refresh = function() {
-    this.contents.clear();
-    this.changeTextColor(this.textColor(PHPlugins.Params.PHQuestTextTitleColor));
-    this.drawText(PHPlugins.Params.PHQuestTextTitle, 0, 0, Graphics.boxWidth, "center");
-};
-
-
-/*
  * WINDOW QUEST BOOK CATEGORY
  */
 function Window_QuestBookCategory() {
@@ -649,7 +636,7 @@ Window_QuestBookCategory.prototype = Object.create(Window_Command.prototype);
 Window_QuestBookCategory.prototype.constructor = Window_QuestBookCategory;
 
 Window_QuestBookCategory.prototype.initialize = function() {
-    Window_Command.prototype.initialize.call(this, 0, this.fittingHeight(1));
+    Window_Command.prototype.initialize.call(this, 0, 0);
     this._questQuantity = PHPlugins.PHQuests.getQuantityQuests();
     this.select(0);
 };
@@ -659,32 +646,46 @@ Window_QuestBookCategory.prototype.setListWindow = function(window) {
 };
 
 Window_QuestBookCategory.prototype.setQuestCategory = function() {
-    PHPlugins.PHQuests._lastCategory = this.currentSymbol() || 'default';
+    PHPlugins.PHQuests._lastCategory = this.currentSymbol() || 'primary';
 };
 
 Window_QuestBookCategory.prototype.maxCols = function() {
-    return 1;
+    var qtty = 1;
+    if (this._questQuantity.secondary > 0) {
+        qtty++;
+    }
+    if (this._questQuantity.complete > 0) {
+        qtty++;
+    }
+    if (this._questQuantity.fail > 0) {
+        qtty++;
+    }
+    return qtty;
 };
 
 Window_QuestBookCategory.prototype.windowWidth = function() {
-    return parseInt((Graphics.boxWidth * 2) / 6);
+    return Graphics.boxWidth;
 };
 
 Window_QuestBookCategory.prototype.windowHeight = function() {
-    return Graphics.boxHeight - this.fittingHeight(1);
+    return this.fittingHeight(1);
 };
 
 Window_QuestBookCategory.prototype.makeCommandList = function() {
-    this._questQuantity = this._questQuantity || PHPlugins.PHQuests.getQuantityQuests();
-    var added = false;
-    for (var val in this._questQuantity) {
-        if (this._questQuantity.hasOwnProperty(val) && this._questQuantity[val].qtty > 0) {
-            this.addCommand(this._questQuantity[val].name, val, true);
-            added = true;
-        }
+    this._questQuantity =  this._questQuantity || PHPlugins.PHQuests.getQuantityQuests();
+    if (this._questQuantity.primary > 0) {
+        this.addCommand(PHPlugins.Params.PHQuestTextPrimary, 'primary', true);
     }
-
-    if (!added) {
+    if (this._questQuantity.secondary > 0) {
+        this.addCommand(PHPlugins.Params.PHQuestTextSecondary, 'secondary', true);
+    }
+    if (this._questQuantity.complete > 0) {
+        this.addCommand(PHPlugins.Params.PHQuestTextComplete, 'complete', true);
+    }
+    if (this._questQuantity.fail > 0) {
+        this.addCommand(PHPlugins.Params.PHQuestTextFail, 'fail', true);
+    }
+    if (this._questQuantity.primary <= 0 && this._questQuantity.secondary <= 0 && this._questQuantity.complete <= 0 && this._questQuantity.fail <= 0) {
         this.addCommand(PHPlugins.Params.PHQuestTextNoQuest, 'noquest', false);
     }
 };
@@ -734,12 +735,19 @@ Window_QuestBookDetails.prototype.constructor = Window_QuestBookDetails;
 
 Window_QuestBookDetails.prototype.initialize = function() {
 
+    var height;
+    var categoryHeight = this.fittingHeight(1);
+
     this._questPage = 0;
     this._lastTotalPages = 0;
-    var height = this.fittingHeight(1);
 
-    var categoryDistance = parseInt((Graphics.boxWidth * 2) / 6);
-    Window_Selectable.prototype.initialize.call(this, categoryDistance, height, Graphics.boxWidth - categoryDistance, Graphics.boxHeight - height);
+    if (PHPlugins.Params.PHQuestDisplayType == 0) {
+        height = this.fittingHeight(3);
+        Window_Selectable.prototype.initialize.call(this, 0, categoryHeight + height, Graphics.boxWidth, Graphics.boxHeight - height - categoryHeight);
+    } else if (PHPlugins.Params.PHQuestDisplayType == 1) {
+        height = parseInt((Graphics.boxWidth * 2) / 6);
+        Window_Selectable.prototype.initialize.call(this, height, categoryHeight, Graphics.boxWidth - height, Graphics.boxHeight - categoryHeight);
+    }
 
 };
 
@@ -906,9 +914,17 @@ Window_QuestBookList.prototype.constructor = Window_QuestBookList;
 Window_QuestBookList.prototype.initialize = function() {
 
     this._questList = [];
-    var categoryDistance = parseInt((Graphics.boxWidth * 2) / 6);
-    var height = this.fittingHeight(1);
-    Window_Selectable.prototype.initialize.call(this, categoryDistance, height, Graphics.boxWidth - categoryDistance, Graphics.boxHeight - height);
+
+    var height;
+    var categoryHeight = this.fittingHeight(1);
+
+    if (PHPlugins.Params.PHQuestDisplayType == 0) {
+        height = this.fittingHeight(3);
+        Window_Selectable.prototype.initialize.call(this, 0, categoryHeight, Graphics.boxWidth, height);
+    } else if (PHPlugins.Params.PHQuestDisplayType == 1) {
+        height = parseInt((Graphics.boxWidth * 2) / 6);
+        Window_Selectable.prototype.initialize.call(this, 0, categoryHeight, height, Graphics.boxHeight - categoryHeight);
+    }
 
     this.refresh();
 };
@@ -960,6 +976,9 @@ Window_QuestBookList.prototype.drawQuest = function(quest, index) {
 };
 
 
+
+
+
 /* ---------------------------------------------------------- *
  *                        SCENE PROCESS                       *
  * ---------------------------------------------------------- */
@@ -984,7 +1003,6 @@ Scene_QuestBook.prototype.create = function() {
     this.createWindowDetail();
     this.createWindowList();
     this.createWindowCategory();
-    this.createWindowTitle();
     this.changeWindowsOpacity();
 
 };
@@ -1019,17 +1037,11 @@ Scene_QuestBook.prototype.createWindowDetail = function() {
     this.addWindow(this._detailWindow);
 };
 
-Scene_QuestBook.prototype.createWindowTitle = function() {
-    this._titleWindow = new Window_QuestBookTitle();
-    this.addWindow(this._titleWindow);
-};
-
 Scene_QuestBook.prototype.changeWindowsOpacity = function() {
     if (PHPlugins.Params.PHQuestBackgroundImage != '') {
         this._categoryWindow.opacity = 0;
         this._listWindow.opacity = 0;
         this._detailWindow.opacity = 0;
-        this._titleWindow.opacity = 0;
     }
 };
 
@@ -1049,15 +1061,11 @@ Scene_QuestBook.prototype.onListCancel = function() {
 
 Scene_QuestBook.prototype.onListOk = function() {
     this._listWindow.deactivate();
-    this._listWindow.hide();
-    this._detailWindow.show();
     this._detailWindow.activate();
 };
 
 Scene_QuestBook.prototype.onDetailCancel = function() {
     this._detailWindow._questPage = 0;
     this._detailWindow.deactivate();
-    this._detailWindow.hide();
-    this._listWindow.show();
     this._listWindow.activate();
 };
