@@ -3,6 +3,12 @@ Quest Book for RPG Maker MV
 *created by PrimeHover*
 *Version 2.0*
 
+### License
+* This work is licensed under the Creative Commons Attribution 4.0 International License.
+* To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/
+* If this plugin is very useful to you and you want to help this plugin to keep improving, consider making a small donation using the link below:
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Q7CRGSXWBSP22)
+
 ### Installation
 * Download the JS file and include it into the ```/plugins``` folder of your project.
 * Open the Plugin Manager, select the file **PH_QuestBook.js**, and turn it on.
