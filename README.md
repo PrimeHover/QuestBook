@@ -14,6 +14,9 @@ Quest Book for RPG Maker MV
 * Open the Plugin Manager, select the file **PH_QuestBook.js**, and turn it on.
 * ```IMPORTANT: If you were using the versions 1.3.1 and you want to see the documentation, there is a folder called "1.3.1" with the entire doc. However, if you want to update from the version 1.3.1 to 2.0, read the full documentation again to adapt the old setting to the new ones! I do not recommend updating if your project is above 70% done.```
 
+### How to Use
+* You can check out the full documentation with all the rules and settings in [HERE](http://primehover.gufernandes.com.br/ph-quest-book).
+
 ### Parameters
 * ``Show in Menu``: Show the Quest Book on the menu (0: no, 1: yes).
 * ``Name in Menu``: Label of the Quest Book on the menu.
